@@ -33,11 +33,11 @@ function __prompt_cwd
 
     switch "$PWD"
         case "$realhome"
-            echo -s -n (set_color cyan) "~"
+            echo -s -n (set_color cyan) "~" (set_color normal)
         case "/"
-            echo -s -n (set_color cyan) "/"
+            echo -s -n (set_color cyan) "/" (set_color normal)
         case "*"
-            echo -s -n (set_color cyan) $basename
+            echo -s -n (set_color cyan) $basename (set_color normal)
     end
 end
 
@@ -112,6 +112,7 @@ function __prompt_git_status
     end
     if test -n "$git_status"
         echo -s -n $git_status
+        set_color normal
     end
 end
 
