@@ -10,9 +10,10 @@ function __prompt_status --argument-names exit_code
 end
 
 function __prompt_user_host
-    if string match "\([-a-zA-Z0-9\.]+\)" (who am i)
+    set -l me
+    if test -n "$SSH_CONNECTION"
         set me "$USER@"(prompt_hostname)
-    else if test $USER != (logname)
+    else if test "$USER" != "$LOGNAME"
         set me "$USER"
     end
     if test -n "$me"
