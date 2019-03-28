@@ -1,3 +1,3 @@
 # HYPERFISH
 
-* [hyperzsh](https://github.com/tylerreckart/hyperzsh)
+Ported from [hyperzsh](https://github.com/tylerreckart/hyperzsh)

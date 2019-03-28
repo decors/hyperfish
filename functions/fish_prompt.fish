@@ -1,11 +1,11 @@
 function fish_prompt
     set -l exit_code $status
-    echo -s -n  (__prompt_user_host) (__prompt_python_venv) (__prompt_cwd) " " (__prompt_git_info) (__prompt_status $exit_code) "➜ "
+    echo -s -n  (__prompt_user_host) (__prompt_python_venv) (__prompt_cwd) ' ' (__prompt_git_info) (__prompt_status $exit_code) "➜ "
 end
 
 function __prompt_status --argument-names exit_code
     if test $exit_code -ne 0
-        echo -s -n (set_color red) "⍉ "
+        echo -s -n (set_color red) "⍉ " (set_color normal)
     end
 end
 
@@ -44,21 +44,21 @@ end
 function __prompt_git_info
     set -l is_git_repository (command git rev-parse --is-inside-work-tree 2>/dev/null)
     if test -n "$is_git_repository"
-        echo -s -n $FISH_THEME_GIT_PROMPT_PREFIX (__prompt_git_branch) (__prompt_git_dirty) $FISH_THEME_GIT_PROMPT_SUFFIX (set_color normal) (__prompt_git_time_since_commit) (__prompt_git_status)
+        echo -s -n $FISH_THEME_GIT_PROMPT_PREFIX (__prompt_git_branch) (__prompt_git_dirty) $FISH_THEME_GIT_PROMPT_SUFFIX (__prompt_git_time_since_commit) (__prompt_git_status)
     end
 end
 
 function __prompt_git_branch
     set -l git_branch (command git symbolic-ref --short HEAD 2> /dev/null)
-    if [ $status -gt 0 ]
+    if test $status -gt 0
         set git_branch (command git show-ref --head -s --abbrev HEAD 2> /dev/null)[1]
     end
-    echo -s -n "$git_branch"
+    echo -s -n "$git_branch "
 end
 
 function __prompt_git_dirty
     set -l git_dirty (command git status --porcelain --ignore-submodules 2>/dev/null)
-    if [ -n "$git_dirty" ]
+    if test -n "$git_dirty"
         echo -s -n "$FISH_THEME_GIT_PROMPT_DIRTY"
     else
         echo -s -n "$FISH_THEME_GIT_PROMPT_CLEAN"
@@ -110,8 +110,8 @@ function __prompt_git_status
     if echo "$index" | grep '^## .*diverged' > /dev/null 2>&1
         set -a git_status "$FISH_THEME_GIT_PROMPT_DIVERGED"
     end
-    if [ -n "$git_status" ]
-        echo "$git_status "
+    if test -n "$git_status"
+        echo -s -n $git_status
     end
 end
 
@@ -131,9 +131,9 @@ function __prompt_git_time_since_commit
         set -l sub_minutes (math -s0 $minutes % 60)
 
         set -l commit_age
-        if [ $hours -ge 24 ]
+        if test $hours -ge 24
             set commit_age $days"d"
-        else if [ $minutes -gt 60 ]
+        else if test $minutes -gt 60
             set commit_age $sub_hours"h"$sub_minutes"m"
         else
             set commit_age $minutes"m"
@@ -141,8 +141,8 @@ function __prompt_git_time_since_commit
 
         set -l color
         set -l git_status (git status -s 2> /dev/null)
-        if [ -n "$git_status" ]
-            if [ "$hours" -gt 4 ]
+        if test -n "$git_status"
+            if test "$hours" -gt 4
                 set color "$FISH_THEME_GIT_TIME_SINCE_COMMIT_LONG"
             else if [ "$minutes" -gt 30 ]
                 set color "$FISH_THEME_GIT_TIME_SHORT_COMMIT_MEDIUM"
@@ -153,6 +153,6 @@ function __prompt_git_time_since_commit
             set color "$FISH_THEME_GIT_TIME_SINCE_COMMIT_NEUTRAL"
         end
 
-        echo -s -n $color $commit_age (set_color normal)
+        echo -s -n "$color$commit_age " (set_color normal)
     end
 end
