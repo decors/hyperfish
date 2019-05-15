@@ -43,7 +43,7 @@ function __prompt_cwd
 end
 
 function __prompt_git_info
-    set -l is_git_repository (command git rev-parse --is-inside-work-tree 2>/dev/null)
+    set -l is_git_repository (command git rev-parse --is-inside-work-tree 2> /dev/null)
     if test -n "$is_git_repository"
         echo -s -n $FISH_THEME_GIT_PROMPT_PREFIX (__prompt_git_branch) (__prompt_git_dirty) $FISH_THEME_GIT_PROMPT_SUFFIX (__prompt_git_time_since_commit) (__prompt_git_status)
     end
@@ -58,7 +58,7 @@ function __prompt_git_branch
 end
 
 function __prompt_git_dirty
-    set -l git_dirty (command git status --porcelain --ignore-submodules 2>/dev/null)
+    set -l git_dirty (command git status --porcelain --ignore-submodules 2> /dev/null)
     if test -n "$git_dirty"
         echo -s -n "$FISH_THEME_GIT_PROMPT_DIRTY"
     else
@@ -96,7 +96,7 @@ function __prompt_git_status
     else if echo "$index" | grep '^AD ' > /dev/null 2>&1
         set -a git_status "$FISH_THEME_GIT_PROMPT_DELETED"
     end
-    if command git rev-parse --verify refs/stash >/dev/null 2>&1
+    if command git rev-parse --verify refs/stash > /dev/null 2>&1
         set -a git_status "$FISH_THEME_GIT_PROMPT_STASHED"
     end
     if echo "$index" | grep '^UU ' > /dev/null 2>&1
@@ -146,7 +146,7 @@ function __prompt_git_time_since_commit
         if test -n "$git_status"
             if test "$hours" -gt 4
                 set color "$FISH_THEME_GIT_TIME_SINCE_COMMIT_LONG"
-            else if [ "$minutes" -gt 30 ]
+            else if test "$minutes" -gt 30
                 set color "$FISH_THEME_GIT_TIME_SHORT_COMMIT_MEDIUM"
             else
                 set color "$FISH_THEME_GIT_TIME_SINCE_COMMIT_SHORT"
