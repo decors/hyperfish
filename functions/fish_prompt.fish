@@ -76,7 +76,7 @@ function __prompt_git_status
     end
     if string match -qr '^A  ' $index > /dev/null 2>&1
         set -a git_status "$FISH_THEME_GIT_PROMPT_ADDED"
-    else if echo "$index" | grep '^M  ' > /dev/null 2>&1
+    else if string match -qr '^M  '  > /dev/null 2>&1
         set -a git_status "$FISH_THEME_GIT_PROMPT_ADDED"
     end
     if string match -qr '^ M ' $index > /dev/null 2>&1
