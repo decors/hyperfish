@@ -68,47 +68,47 @@ end
 
 function __prompt_git_status
     set -l index
-    begin; set -l IFS; set index (command git status --porcelain -b 2> /dev/null); end
+    set index (command git status --porcelain -b 2> /dev/null)
 
     set -l git_status
-    if echo "$index" | grep -E '^\?\? ' > /dev/null 2>&1
+    if string match -qr '^\?\? ' $index > /dev/null 2>&1
         set -a git_status "$FISH_THEME_GIT_PROMPT_UNTRACKED"
     end
-    if echo "$index" | grep '^A  ' > /dev/null 2>&1
+    if string match -qr '^A  ' $index > /dev/null 2>&1
         set -a git_status "$FISH_THEME_GIT_PROMPT_ADDED"
     else if echo "$index" | grep '^M  ' > /dev/null 2>&1
         set -a git_status "$FISH_THEME_GIT_PROMPT_ADDED"
     end
-    if echo "$index" | grep '^ M ' > /dev/null 2>&1
+    if string match -qr '^ M ' $index > /dev/null 2>&1
         set -a git_status "$FISH_THEME_GIT_PROMPT_MODIFIED"
-    else if echo "$index" | grep '^AM ' > /dev/null 2>&1
+    else if string match -qr '^AM ' $index > /dev/null 2>&1
         set -a git_status "$FISH_THEME_GIT_PROMPT_MODIFIED"
-    else if echo "$index" | grep '^ T ' > /dev/null 2>&1
+    else if string match -qr '^ T ' $index > /dev/null 2>&1
         set -a git_status "$FISH_THEME_GIT_PROMPT_MODIFIED"
     end
-    if echo "$index" | grep '^R  ' > /dev/null 2>&1
+    if string match -qr '^R  ' $index > /dev/null 2>&1
         set -a git_status "$FISH_THEME_GIT_PROMPT_RENAMED"
     end
-    if echo "$index" | grep '^ D ' > /dev/null 2>&1
+    if string match -qr '^ D ' $index > /dev/null 2>&1
         set -a git_status "$FISH_THEME_GIT_PROMPT_DELETED"
-    else if echo "$index" | grep '^D  ' > /dev/null 2>&1
+    else if string match -qr '^D  ' $index > /dev/null 2>&1
         set -a git_status "$FISH_THEME_GIT_PROMPT_DELETED"
-    else if echo "$index" | grep '^AD ' > /dev/null 2>&1
+    else if string match -qr '^AD ' $index > /dev/null 2>&1
         set -a git_status "$FISH_THEME_GIT_PROMPT_DELETED"
     end
     if command git rev-parse --verify refs/stash > /dev/null 2>&1
         set -a git_status "$FISH_THEME_GIT_PROMPT_STASHED"
     end
-    if echo "$index" | grep '^UU ' > /dev/null 2>&1
+    if string match -qr '^UU ' $index > /dev/null 2>&1
         set -a git_status "$FISH_THEME_GIT_PROMPT_UNMERGED"
     end
-    if echo "$index" | grep '^## .*ahead' > /dev/null 2>&1
+    if string match -qr '^## .*ahead' $index > /dev/null 2>&1
         set -a git_status "$FISH_THEME_GIT_PROMPT_AHEAD"
     end
-    if echo "$index" | grep '^## .*behind' > /dev/null 2>&1
+    if string match -qr '^## .*behind' $index > /dev/null 2>&1
         set -a git_status "$FISH_THEME_GIT_PROMPT_BEHIND"
     end
-    if echo "$index" | grep '^## .*diverged' > /dev/null 2>&1
+    if string match -qr '^## .*diverged' $index > /dev/null 2>&1
         set -a git_status "$FISH_THEME_GIT_PROMPT_DIVERGED"
     end
     if test -n "$git_status"
